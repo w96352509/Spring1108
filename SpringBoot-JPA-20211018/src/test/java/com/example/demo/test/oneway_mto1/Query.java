@@ -10,7 +10,7 @@ import com.example.demo.entity.oneway_mto1.Customer;
 import com.example.demo.entity.oneway_mto1.Order;
 
 @SpringBootTest
-public class Create {
+public class Query {
 	@Autowired
 	CustomerRepository customerRepository;
 	
@@ -19,13 +19,25 @@ public class Create {
    
 	  @Test
        public void start() {
-	      //ManyToOne 預設是 fetch=FetchType.EAGER
-		  //所以SQL會進行Left outer join 來聯集其他資料表
-		  //手動改成懶連結後就只會單查order(不會搜尋榜定方)
-		  Order order = orderRepository.findById(1L).get();
-		  System.out.println(order.getName());
-		  //但可手動加入查找綁定 , 但會再跑一次綁定方得sql
-		  System.out.println(order.getCustomer().getName());
-	      
-	  }
+	   System.out.println("create");
+	   Customer c1 = new Customer();
+	   c1.setName("John");
+	   c1.setAge(20);
+	   
+	   Order order = new Order();
+	   order.setName("A-1");
+	   
+	   Order order2 = new Order();
+	   order2.setName("B-2");
+	   
+	   //設置關聯性
+	   order.setCustomer(c1);
+	   order2.setCustomer(c1);
+	   
+	   //執行單向多對一的保存 
+	   //(先存優先綁定物件)
+	   customerRepository.save(c1); //單方
+	   orderRepository.save(order); //多方
+	   orderRepository.save(order2);//多方
+	 }
 }

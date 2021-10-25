@@ -2,8 +2,10 @@ package com.example.demo.entity.oneway_mto1;
 
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,7 +25,8 @@ public class Order {
     @Column
 	private Integer age;
     //單向多對一 (通常建立在多方)
-    @ManyToOne
+    //@ManyToOne(fetch = FetchType.LAZY) //懶查詢
+    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.MERGE) 
     //customer_id 指的是一個外鍵(不可以隨便亂輸入 , 要對方表單也有的)
     @JoinColumn(name = "customer_id")
     private Customer customer;
